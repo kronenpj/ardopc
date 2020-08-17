@@ -6,7 +6,6 @@
 #define _XOPEN_SOURCE 600
 #define _GNU_SOURCE
 
-#include <features.h>
 
 #include <stdlib.h>
 #include <fcntl.h>
