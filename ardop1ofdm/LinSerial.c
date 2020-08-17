@@ -6,6 +6,10 @@
 #define _XOPEN_SOURCE 600
 #define _GNU_SOURCE
 
+#ifdef __APPLE__
+#define _DARWIN_C_SOURCE
+#endif
+
 
 #include <stdlib.h>
 #include <fcntl.h>
@@ -35,7 +39,7 @@ HANDLE LinuxOpenPTY(char * Name)
 	HANDLE hDevice, slave;
 	char slavedevice[80];
 	int ret;
-	u_long param=1;
+	unsigned long param=1;
 	struct termios term;
 
 #ifdef MACBPQ
@@ -160,7 +164,7 @@ HANDLE OpenCOMPort(VOID * Port, int speed, BOOL SetDTR, BOOL SetRTS, BOOL Quiet,
 
 	int fd;
 	int hwflag = 0;
-	u_long param=1;
+	unsigned long param=1;
 	struct termios term;
 	struct speed_struct *s;
 
