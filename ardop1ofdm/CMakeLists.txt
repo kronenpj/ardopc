@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.7)
 
 # set the project name
 set(PROJECT_NAME ardopc)
@@ -45,3 +45,9 @@ endif()
 set(SRC_FILES ${COMMON_SRC} ${PLATFORM_SRC})
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+if(UNIX AND NOT APPLE)
+    find_library(ALSA_LIB asound)
+    target_link_libraries(${PROJECT_NAME} PRIVATE "${ALSA_LIB}" rt m pthread)
+endif()
+
