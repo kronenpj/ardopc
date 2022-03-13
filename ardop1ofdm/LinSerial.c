@@ -325,4 +325,3 @@ void CatWrite(char * Buffer, int Len)
 	WriteDebugLog(5, "CAT Write Len %d %s", Len, Buffer);
 	if (hCATDevice)
 		WriteCOMBlock(hCATDevice, Buffer, Len);
-}
