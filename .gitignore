@@ -1,3 +1,16 @@
+.vscode
+*.log
+*.pdf
+ardop1ofdm/ardop1ofdm
+ardop2ofdm/ardopofdm
+ardop1/ardopc
+output.map
+
+
+# Created by https://www.toptal.com/developers/gitignore/api/c
+# Edit at https://www.toptal.com/developers/gitignore?templates=c
+
+### C ###
 # Prerequisites
 *.d
 
@@ -50,3 +63,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# End of https://www.toptal.com/developers/gitignore/api/c
+
