@@ -1539,10 +1539,10 @@ void SoundFlush()
 
 	while (1 && playhandle)
 	{
-//		snd_pcm_sframes_t avail = snd_pcm_avail_update(playhandle);
-
-//		Debugprintf("Waiting for complete. Avail %d Max %d", avail, MaxAvail);
-
+#if SND_LIB_MAJOR >= 1 && SND_LIB_MINOR >= 2 && SND_LIB_SUBMINOR >= 6
+		snd_pcm_sframes_t avail = snd_pcm_avail_update(playhandle);
+		// Debugprintf("Waiting for complete. Avail %d Max %d", avail, MaxAvail);
+#else
 		snd_pcm_status_alloca(&status);					// alloca allocates once per function, does not need a free
 
 		if ((err=snd_pcm_status(playhandle, status))!=0)
@@ -1553,10 +1553,14 @@ void SoundFlush()
 	 
 		res = snd_pcm_status_get_state(status);
 
-//		Debugprintf("PCM Status = %d", res);
+		// Debugprintf("PCM Status = %d", res);
+#endif
 
+#if SND_LIB_MAJOR >= 1 && SND_LIB_MINOR >= 2 && SND_LIB_SUBMINOR >= 6 
+		if (MaxAvail - avail < 100)	
+#else
 		if (res != SND_PCM_STATE_RUNNING)				// If sound system is not running then it needs data
-//		if (MaxAvail - avail < 100)	
+#endif
 		{
 			// Send complete - Restart Capture
 
