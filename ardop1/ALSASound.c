@@ -1537,11 +1537,14 @@ void SoundFlush()
 
 	// Wait for tx to complete
 
+	snd_pcm_sframes_t temp_frames = 0; // Keep track of the previous available frames.
 	while (1 && playhandle)
 	{
 #if SND_LIB_MAJOR >= 1 && SND_LIB_MINOR >= 2 && SND_LIB_SUBMINOR >= 6
 		snd_pcm_sframes_t avail = snd_pcm_avail_update(playhandle);
 		// Debugprintf("Waiting for complete. Avail %d Max %d", avail, MaxAvail);
+
+		if (MaxAvail - avail < 100 || avail == temp_frames)
 #else
 		snd_pcm_status_alloca(&status);					// alloca allocates once per function, does not need a free
 
@@ -1554,11 +1557,6 @@ void SoundFlush()
 		res = snd_pcm_status_get_state(status);
 
 		// Debugprintf("PCM Status = %d", res);
-#endif
-
-#if SND_LIB_MAJOR >= 1 && SND_LIB_MINOR >= 2 && SND_LIB_SUBMINOR >= 6 
-		if (MaxAvail - avail < 100)	
-#else
 		if (res != SND_PCM_STATE_RUNNING)				// If sound system is not running then it needs data
 #endif
 		{
@@ -1567,6 +1565,10 @@ void SoundFlush()
 			OpenSoundCapture(SavedCaptureDevice, SavedCaptureRate, strFault);	
 			break;
 		}
+#if SND_LIB_MAJOR >= 1 && SND_LIB_MINOR >= 2 && SND_LIB_SUBMINOR >= 6
+		// Debugprintf("Waiting for complete. Avail %d Previous %d", avail, temp_frames);
+		temp_frames = avail;
+#endif
 		usleep(50000);
 	}
 	// I think we should turn round the link here. I dont see the point in
