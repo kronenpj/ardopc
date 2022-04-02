@@ -5,7 +5,7 @@ ardop1ofdm/ardop1ofdm
 ardop2ofdm/ardopofdm
 ardop1/ardopc
 output.map
-
+ARDOP_GUI
 
 # Created by https://www.toptal.com/developers/gitignore/api/c
 # Edit at https://www.toptal.com/developers/gitignore?templates=c
