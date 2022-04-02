@@ -481,10 +481,12 @@ const char shortFrameType[256][12] = {
 	"","",
 
         //Short Control Frames 1 Car, 200Hz,4F  ' Reassigned May 22, 2015 for maximum "distance"
- 
+	//0x23,  0x24
 	"BREAK", "IDLE", "",
 	"", "", "",
+	//0x29
 	"DISC", "", "",
+	//0x2C
 	"END",
 	"ConRejBusy",
 	"ConRejBW",
@@ -497,12 +499,12 @@ const char shortFrameType[256][12] = {
 	"ConReq500M",
 	"ConReq1KM",
 	"ConReq2KM",
-	"ConReq200F",
+	"ConReq200F", // 0x35
 	"ConReq500F",
 	"ConReq1KF",
 	"ConReq2KF",
 	"ConAck200",
-	"ConAck500",
+	"ConAck500",  // 0x3A
 	"ConAck1K",
 	"ConAck2K",
 	// Types 0x3D to 0x3F reserved
@@ -849,9 +851,9 @@ BOOL FrameInfo(UCHAR bytFrameType, int * blnOdd, int * intNumCar, char * strMod,
 
 	switch(bytFrameType)
 	{
-	case 0x23:
-	case 0x24:
-	case 0x29:
+	case 0x23: // "BREAK"
+	case 0x24: // "IDLE"
+	case 0x29: // "DISC"
 
 		*blnOdd = (1 & bytFrameType) != 0;
 		*intNumCar = 1;
@@ -862,9 +864,9 @@ BOOL FrameInfo(UCHAR bytFrameType, int * blnOdd, int * intNumCar, char * strMod,
 		*bytQualThres = 60;
 		break;
 	
-	case 0x2C:
-	case 0x2D:
-	case 0x2E:
+	case 0x2C: // "END"
+	case 0x2D: // "ConRejBusy"
+	case 0x2E: // "ConRejBW"
 		
 		*blnOdd = (1 & bytFrameType) != 0;
 		*intNumCar = 1;
@@ -875,7 +877,7 @@ BOOL FrameInfo(UCHAR bytFrameType, int * blnOdd, int * intNumCar, char * strMod,
 		*bytQualThres = 60;
 		break;
 
-	case 0x30:
+	case 0x30: // "IDFrame"
 	case 0x31:
 	case 0x32:
 	case 0x33:
@@ -895,11 +897,11 @@ BOOL FrameInfo(UCHAR bytFrameType, int * blnOdd, int * intNumCar, char * strMod,
 		*bytQualThres = 50;
 		break;
 
-	case 0x39:
+	case 0x39: // "ConAck200"
 	case 0x3A:
 	case 0x3B:
 	case 0x3C:
-	case 0x3D:
+	case 0x3D: // "PingAck"
 
 		*blnOdd = (1 & bytFrameType) != 0;
 		*intNumCar = 1;
@@ -910,7 +912,7 @@ BOOL FrameInfo(UCHAR bytFrameType, int * blnOdd, int * intNumCar, char * strMod,
 		*bytQualThres = 50;
 		break;
 
-	case 0xe0:
+	case 0xe0: // "DataAck"
 
 		*blnOdd = (1 & bytFrameType) != 0;
 		*intNumCar = 1;
