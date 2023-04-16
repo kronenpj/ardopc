@@ -290,8 +290,7 @@ VOID COMClearRTS(HANDLE fd)
 
 UCHAR RXBUFFER[500]; // Long enough for stuffed Host Mode frame
 
-int RXBPtr = 0;
-
+extern volatile int RXBPtr;
 
 VOID SerialHostPoll()
 {

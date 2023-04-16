@@ -17,6 +17,7 @@
 
 #include "ARDOPC.h"
 #include "getopt.h"
+#include "Version.h"
 
 void CompressCallsign(char * Callsign, UCHAR * Compressed);
 void CompressGridSquare(char * Square, UCHAR * Compressed);
@@ -2631,11 +2632,11 @@ BOOL MainPoll()
 int dttLastBusy;
 int dttLastClear;
 int dttStartRTMeasure;
-int intLastStart;
-int intLastStop;
-float dblAvgBaselineSlow;
-float dblAvgBaselineFast;
-float dblAvgPk2BaselineRatio;
+extern int intLastStart;
+extern int intLastStop;
+extern float dblAvgBaselineSlow;
+extern float dblAvgBaselineFast;
+extern float dblAvgPk2BaselineRatio;
 
 //  Functino to extract bandwidth from ARQBandwidth
 
