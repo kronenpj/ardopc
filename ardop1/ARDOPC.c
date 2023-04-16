@@ -2973,7 +2973,7 @@ void SendPING(char * strMycall, char * strTargetCall, int intRpt)
 
 void ProcessPingFrame(char * bytData)
 {
-	WriteDebugLog(LOGDEBUG, "ProcessPingFrame Protocol State = %s", ARDOPStates[ProtocolState]);
+	WriteDebugLog(LOGDEBUG, "[ProcessPingFrame] Protocol State = %s", ARDOPStates[ProtocolState]);
 	
 	if (ProtocolState == DISC)
 	{

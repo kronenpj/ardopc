@@ -501,7 +501,7 @@ UCHAR GenerateSessionID(char * strCallingCallSign, char *strTargetCallsign)
 
 void CalculateOptimumLeader(int intReportedReceivedLeaderMS,int  intLeaderSentMS)
 {
-	intCalcLeader = max(200, 120 + intLeaderSentMS - intReportedReceivedLeaderMS);  //  This appears to work well on HF sim tests May 31, 2015
+	intCalcLeader = max(400, 120 + intLeaderSentMS - intReportedReceivedLeaderMS);  //  This appears to work well on HF sim tests May 31, 2015
     //    WriteDebugLog(LOGDEBUG, ("[ARDOPprotocol.CalcualteOptimumLeader] Leader Sent=" & intLeaderSentMS.ToString & "  ReportedReceived=" & intReportedReceivedLeaderMS.ToString & "  Calculated=" & stcConnection.intCalcLeader.ToString)
 }
 
