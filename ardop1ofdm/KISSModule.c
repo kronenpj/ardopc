@@ -1,5 +1,5 @@
 //
-// KISS Code for ARDOPC. 
+// KISS Code for ARDOPC.
 //
 //	Allows Packet modes and ARDOP to coexist in same program
 //	Mainly for Teensy Version.
@@ -31,7 +31,7 @@
 
 #include "ARDOPC.h"
 
-#define FEND 0xC0 
+#define FEND 0xC0
 #define FESC 0xDB
 #define TFEND 0xDC
 #define TFESC 0xDD
@@ -49,7 +49,7 @@ VOID ptkSessionBG();
 
 
 
-// HANDLE hDevice;
+extern HANDLE hDevice;
 
 char KISSPORTNAME[80] = "";  // for now just support over Host Interface;
 
@@ -67,8 +67,8 @@ typedef struct _SERIAL_STATUS {
 // Buffers for KISS frames to and from the host. Uses cyclic buffers
 // Size must be modulo 2 so we can AND with mask to make cyclic
 
-#define KISSBUFFERSIZE 4096		
-#define KISSBUFFERMASK 4095	
+#define KISSBUFFERSIZE 4096
+#define KISSBUFFERMASK 4095
 
 
 //	KISS bytes from a serial, i2c or Host Mode link are placed in
@@ -99,7 +99,7 @@ HANDLE KISSHandle = 0;
 
 extern BOOL PacketHost;
 
-int TXDelay = 500;	
+int TXDelay = 500;
 
 extern SOCKET PktSock;
 extern BOOL PKTCONNECTED;
@@ -114,7 +114,7 @@ BOOL KISSInit()
 		KISSHandle = OpenCOMPort(KISSPORTNAME, 19200, FALSE, FALSE, FALSE, 0);
 
 	if (KISSHandle)
-		WriteDebugLog(LOGALERT, "KISS interface Using port %s", KISSPORTNAME); 
+		WriteDebugLog(LOGALERT, "KISS interface Using port %s", KISSPORTNAME);
 #endif
 
 	return TRUE;
@@ -173,7 +173,7 @@ VOID ProcessKISSBytes(UCHAR * RXBuffer, int Read)
 
 	UCHAR c;
 
-	WriteDebugLog(LOGALERT, "Queuing %d Packet Bytes", Read); 
+	WriteDebugLog(LOGALERT, "Queuing %d Packet Bytes", Read);
 
 
 	while (Read--)
@@ -207,7 +207,7 @@ VOID ProcessKISSByte(UCHAR c)
 		FENDCount = 0;		// Buffer is now empty
 }
 
-	
+
 BOOL GetNextKISSFrame()
 {
 	// Called to get a frame to send, either before starting or
@@ -221,7 +221,7 @@ BOOL GetNextKISSFrame()
 	if (KRXPutPtr == KRXGetPtr)	// Nothing to send
 	{
 		ptkSessionBG();			// See if any session events to process
-		
+
 		if (KRXPutPtr == KRXGetPtr)	// Still nothing to send
 			return FALSE;			// Buffer empty
 
@@ -238,8 +238,8 @@ BOOL GetNextKISSFrame()
 		{
 			if (KISSRXBUFF[KRXGetPtr++] == FEND)
 			{
-				// Found a FEND. 
-		
+				// Found a FEND.
+
 				KRXGetPtr &= KISSBUFFERMASK;
 				FENDCount --;
 
@@ -250,7 +250,7 @@ BOOL GetNextKISSFrame()
 				return FALSE;
 			}
 		}
-	
+
 		// no FENDS in buffer!!!
 
 		FENDCount = 0;		// Buffer is now empty
@@ -263,7 +263,7 @@ BOOL GetNextKISSFrame()
 
 	KRXGetPtr &= KISSBUFFERMASK;
 	FENDCount --;
-	
+
 	while (KRXPutPtr != KRXGetPtr)
 	{
 		c = KISSRXBUFF[KRXGetPtr++];
@@ -278,7 +278,7 @@ BOOL GetNextKISSFrame()
 
 			if (c == TFESC)
 				c = FESC;
-	
+
 			if (c == TFEND)
 				c = FEND;
 		}
@@ -286,16 +286,16 @@ BOOL GetNextKISSFrame()
 		{
 			switch (c)
 			{
-			case FEND:		
-	
+			case FEND:
+
 				//
 				//	Either start of message or message complete
 				//
-				
+
 				if (RXMPTR == &KISSBUFFER[0])
 				{
 					// Start of Message. Shouldn't Happen
-					FENDCount--;					
+					FENDCount--;
 					continue;
 				}
 
@@ -313,13 +313,13 @@ BOOL GetNextKISSFrame()
 				return TRUE;	// Got complete frame in KISSBUFFER
 
 			case FESC:
-		
+
 				ESCFlag = TRUE;
 				continue;
 
 			}
 		}
-		
+
 		//
 		//	Ok, a normal char
 		//
@@ -357,7 +357,7 @@ BOOL CheckKISS(UCHAR * SCSReply)
 		Length = 256;
 
 	n = 0;
-	
+
 	while (n < Length)
 	{
 		SCSReply[n++ + 5] = KISSTXBUFF[get++];
@@ -365,7 +365,7 @@ BOOL CheckKISS(UCHAR * SCSReply)
 	}
 
 	KTXGetPtr = get;
-	
+
 	SCSReply[2] = 250;
 	SCSReply[3] = 7;
 	SCSReply[4] = Length - 1;
@@ -393,15 +393,15 @@ VOID SendAckModeAck()
 
 	// If using KISS over TCP, send it
 
-#ifndef TEENSY	
-	
+#ifndef TEENSY
+
 	// If Using TCP, send it
 
 	if (pktport)
 	{
 		if (PKTCONNECTED)
 			send(PktSock, KISSTXBUFF, KTXPutPtr, 0);
-	
+
 		KTXPutPtr = 0;
 	}
 
@@ -432,8 +432,8 @@ void SendFrametoHost(unsigned char *data, unsigned dlen)
 			KTXPutPtr &= KISSBUFFERMASK;
 			KISSTXBUFF[KTXPutPtr++] = TFESC;
 			KTXPutPtr &= KISSBUFFERMASK;
-		} 
-		else 
+		}
+		else
 		{
 			KISSTXBUFF[KTXPutPtr++] = *data;
 			KTXPutPtr &= KISSBUFFERMASK;
@@ -443,20 +443,20 @@ void SendFrametoHost(unsigned char *data, unsigned dlen)
 	KISSTXBUFF[KTXPutPtr++] = FEND;
 	KTXPutPtr &= KISSBUFFERMASK;
 
-#ifndef TEENSY	
-	
+#ifndef TEENSY
+
 	// If Using TCP, send it
 
 	if (pktport)
 	{
 		if (PKTCONNECTED)
 			send(PktSock, KISSTXBUFF, KTXPutPtr, 0);
-	
+
 		KTXPutPtr = 0;
 	}
 
 #endif
 }
- 
+
 
 

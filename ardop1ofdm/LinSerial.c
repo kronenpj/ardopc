@@ -29,7 +29,7 @@ BOOL WriteCOMBlock(HANDLE fd, char * Block, int BytesToWrite);
 //#include <pty.h>
 
 HANDLE LinuxOpenPTY(char * Name)
-{            
+{
 	// Open a Virtual COM Port
 
 	HANDLE hDevice, slave;
@@ -41,12 +41,12 @@ HANDLE LinuxOpenPTY(char * Name)
 #ifdef MACBPQ
 
 	// Create a pty pair
-	
+
 	openpty(&hDevice, &slave, &slavedevice[0], NULL, NULL);
 	close(slave);
 
 #else
-	 
+
 	hDevice = posix_openpt(O_RDWR|O_NOCTTY);
 
 	if (hDevice == -1 || grantpt (hDevice) == -1 || unlockpt (hDevice) == -1 ||
@@ -54,12 +54,12 @@ HANDLE LinuxOpenPTY(char * Name)
 	{
 		perror("Create PTY pair failed");
 		return -1;
-	} 
+	}
 
 #endif
 
 	printf("slave device: %s\n", slavedevice);
- 
+
 	if (tcgetattr(hDevice, &term) == -1)
 	{
 		perror("tty_speed: tcgetattr");
@@ -79,14 +79,14 @@ HANDLE LinuxOpenPTY(char * Name)
 	chmod(slavedevice, S_IRUSR|S_IRGRP|S_IWUSR|S_IWGRP|S_IROTH|S_IWOTH);
 
 	unlink (Name);
-		
+
 	ret = symlink (slavedevice, Name);
-		
+
 	if (ret == 0)
 		printf ("symlink to %s created\n", Name);
 	else
-		printf ("symlink to %s failed\n", Name);	
-	
+		printf ("symlink to %s failed\n", Name);
+
 	return hDevice;
 }
 
@@ -121,7 +121,7 @@ BOOL SerialHostInit()
 int ReadCOMBlock(HANDLE fd, char * Block, int MaxLength)
 {
 	int Length;
-	
+
 	Length = read(fd, Block, MaxLength);
 
 	if (Length < 0)
@@ -216,7 +216,7 @@ HANDLE OpenCOMPort(VOID * Port, int speed, BOOL SetDTR, BOOL SetRTS, BOOL Quiet,
 BOOL WriteCOMBlock(HANDLE fd, char * Block, int BytesToWrite)
 {
 	//	Some systems seem to have a very small max write size
-	
+
 	int ToSend = BytesToWrite;
 	int Sent = 0, ret;
 
@@ -231,11 +231,11 @@ BOOL WriteCOMBlock(HANDLE fd, char * Block, int BytesToWrite)
 		{
 			if (errno != 11 && errno != 35)					// Would Block
 				return FALSE;
-	
+
 			usleep(10000);
 			ret = 0;
 		}
-						
+
 		Sent += ret;
 		ToSend -= ret;
 	}
@@ -290,8 +290,7 @@ VOID COMClearRTS(HANDLE fd)
 
 UCHAR RXBUFFER[500]; // Long enough for stuffed Host Mode frame
 
-int RXBPtr = 0;
-
+extern volatile int RXBPtr;
 
 VOID SerialHostPoll()
 {
@@ -300,7 +299,7 @@ VOID SerialHostPoll()
 	Read = ReadCOMBlock(hDevice, &RXBUFFER[RXBPtr], 499 - RXBPtr);
 
 	if (Read)
-	{		
+	{
 		RXBPtr += Read;
 		ProcessSCSPacket(RXBUFFER, RXBPtr);
 	}

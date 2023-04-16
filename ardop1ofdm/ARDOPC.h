@@ -3,14 +3,14 @@
 #ifndef ARDOPCHEADERDEFINED
 #define ARDOPCHEADERDEFINED
 
-#define ProductName "ARDOP TNC"
-#define ProductVersion "1.0.4.1q-OFDMBPQ"
+extern const char ProductName[];
+extern const char ProductVersion[];
+
 
 #ifdef CONST
 #undef CONST
 #endif
 #define CONST const	// for building sample arrays
-
 
 //#define USE_SOUNDMODEM
 
@@ -24,9 +24,9 @@
 
 #define DATABUFFERSIZE 11000
 
-#ifndef _WIN32_WINNT		// Allow use of features specific to Windows XP or later.                   
+#ifndef _WIN32_WINNT		// Allow use of features specific to Windows XP or later.
 #define _WIN32_WINNT 0x0501	// Change this to the appropriate value to target other versions of Windows.
-#endif						
+#endif
 
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #define _CRT_SECURE_NO_DEPRECATE
@@ -50,12 +50,12 @@ unsigned int getTicks();
 
 #define Now getTicks()
 
-// DebugLog Severity Levels 
+// DebugLog Severity Levels
 
-#define LOGEMERGENCY 0 
+#define LOGEMERGENCY 0
 #define LOGALERT 1
-#define LOGCRIT 2 
-#define LOGERROR 3 
+#define LOGCRIT 2
+#define LOGERROR 3
 #define LOGWARNING 4
 #define LOGNOTICE 5
 #define LOGINFO 6
@@ -108,7 +108,7 @@ unsigned int getTicks();
 #define WHITE 0
 #define Tomato 1
 #define Gold 2
-#define Lime 3	
+#define Lime 3
 #define Yellow 4
 #define Orange 5
 #define Khaki 6
@@ -116,7 +116,7 @@ unsigned int getTicks();
 #define DeepSkyBlue 8
 #define RoyalBlue 9
 #define Navy 10
-#define Black 11 
+#define Black 11
 #define Goldenrod 12
 #define Fuchsia 13
 
@@ -284,7 +284,7 @@ VOID ProcessDEDModeFrame(UCHAR * rxbuffer, unsigned int Length);
 BOOL CheckForPktMon();
 BOOL CheckForPktData();
 
-int SendtoGUI(char Type, unsigned char * Msg, int Len);	
+int SendtoGUI(char Type, unsigned char * Msg, int Len);
 void DrawTXFrame(const char * Frame);
 void DrawRXFrame(int State, const char * Frame);
 void mySetPixel(unsigned char x, unsigned char y, unsigned int Colour);
@@ -625,10 +625,10 @@ extern int int16FSKQualityCnts;
 extern int intFSKSymbolsDecoded;
 extern int intPSKQuality[2];
 extern int intPSKQualityCnts[2];
-extern int intPSKSymbolsDecoded; 
+extern int intPSKSymbolsDecoded;
 extern int intOFDMQuality[8];
 extern int intOFDMQualityCnts[8];
-extern int intOFDMSymbolsDecoded; 
+extern int intOFDMSymbolsDecoded;
 
 extern int intQAMQuality;
 extern int intQAMQualityCnts;
